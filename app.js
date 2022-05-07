@@ -24,7 +24,7 @@ app.listen(8080, () => {
 app.get('/api/todos', (req, res) => {
     db.query("SELECT * FROM todo", (err, result) => {
         if (err) {
-            console.log(err)
+            throw err;
         }
         res.status(200).send(result)
     })
@@ -36,7 +36,7 @@ app.get("/api/todo/:id", (req, res) => {
     db.query("SELECT * FROM todo WHERE id = ?", id,
         (err, result) => {
             if (err) {
-                console.log(err)
+                throw err;
             }
             res.status(200).send(result)
         })
