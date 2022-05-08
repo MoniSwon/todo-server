@@ -22,7 +22,7 @@ app.listen(8080, () => {
 
 // Route to get all todos
 app.get('/api/todos', (req, res) => {
-    db.query("SELECT * FROM todo", (err, result) => {
+    db.query("SELECT id, title, description, DATE_FORMAT(due_date, '%d-%m-%Y') as due_date, DATE_FORMAT(creation_date, '%d-%m-%Y') as creation_date, status, label, user FROM todo", (err, result) => {
         if (err) {
             throw err;
         }
