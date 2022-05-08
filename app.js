@@ -55,7 +55,7 @@ app.post('/api/createTodo', (req, res) => {
 
     db.query("INSERT INTO todo (title, description, due_date, status, creation_date, label, user) VALUES (?,?,?,?,?,?,?)", [title, description, dueDate, status, creationDate, label, user], (err, result) => {
         if (err) {
-            console.log(err)
+            throw err;
         }
         res.json({title: req.body.title,
             description:req.body.description,
@@ -65,24 +65,24 @@ app.post('/api/createTodo', (req, res) => {
             creation_date:creationDate,
             user:user,
             id:result.insertId})
-    });
-});
+    })
+})
 
 app.patch('/api/updateTodo', (req, res) => {
-    const { id } = req.query;
-    const { field } = req.query;
-    const { value } = req.query;
-    if (!id || !field || !value) {
-        res.status(400).json(
-            { error: 'one or more parameters is required!' }
-        )
-    }
-    db.query(`UPDATE todo
-                      SET \`${field}\` = '${value}'
-                      WHERE \`todo\`.\`id\` = ${id};`,
-        function (err, rows, fields) {
-            res.json({ rows })
-        });
+    const id = req.query.id;
+    const title = req.query.title;
+    const description = req.query.description;
+    const dueDate = req.query.due_date;
+    const status = req.query.status;
+    const label = req.query.label;
+    const user = req.query.user;
+
+    db.query("UPDATE todo SET title = '" + title + "', description = '" + description + "', due_date = '" + dueDate + "', status = '" + status + "', label = '" + label + "', user = '" + user + "' WHERE id = " + id, (err, rows, result) => {
+        if (err) {
+            console.log(err)
+        }
+        res.json({ rows })
+    });
 });
 
 app.delete('/api/deleteTodo', (req, res) => {
